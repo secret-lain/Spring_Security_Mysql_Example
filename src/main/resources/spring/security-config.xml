@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:b="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/login" access="permitAll" />
+	
+		<form-login
+			login-page="/login" password-parameter="password"
+			username-parameter="id" always-use-default-target="true"
+			login-processing-url="/login/submit" authentication-failure-url="/login?error"
+			default-target-url="/index" />
+			
+		<logout
+			invalidate-session="true"
+			logout-url="/logout"
+			logout-success-url="/index"
+		/>
+		
+		<csrf disabled="true"/>
+	</http>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="userService">
+			<password-encoder ref="passwordEncoder"></password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+	
+	<b:bean id="passwordEncoder" class="main.util.MySqlPasswordEncoder" />
+</b:beans>
